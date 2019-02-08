@@ -1,0 +1,10 @@
+.heightDiv{
+	height: 34rem !important;
+	min-height: 34rem !important;
+}
+
+.contenedor{
+	max-height: 25em;
+	min-height: 10em;
+	overflow-y: scroll; 
+}

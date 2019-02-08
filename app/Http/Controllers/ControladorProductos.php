@@ -1,0 +1,166 @@
+<?php
+
+namespace lasAcaciasCoffeeFarm\Http\Controllers;
+
+use Illuminate\Http\Request;
+use lasAcaciasCoffeeFarm\producto;
+use lasAcaciasCoffeeFarm\hospedaje;
+use lasAcaciasCoffeeFarm\tiquete;
+use Illuminate\Support\Facades\DB;
+use lasAcaciasCoffeeFarm\publicacion;
+use lasAcaciasCoffeeFarm\comentario;
+use lasAcaciasCoffeeFarm\venta_producto;
+use lasAcaciasCoffeeFarm\venta_tours;
+
+class ControladorProductos extends Controller
+{
+    /**
+    *Método para registrar o crear productos, se recibe como parámetro la petición enviada por *POST desde la vista y se crea el producto con los atributos
+    */
+    public function store(Request $request){
+    	
+    	$producto = new producto();
+    	$producto->nombre = $request->input('nombre');
+    	$producto->precio = $request->input('precio');
+    	$producto->cantidad = '0';
+    	$producto->id_granja = '1';
+    	$producto->id_tipo_producto = $request->input('tipo_producto');
+
+    	$producto->save();
+
+    	$listadoProductos = producto::all();
+    	$listadoHospedajes = hospedaje::all();
+    	$listadoTiquetes = tiquete::all();
+		$listadoPublicaciones = publicacion::all();
+        $listadoComentarios = comentario::all();
+
+        $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+
+        $lista_venta_producto = DB::select($consultaReportesProductos);
+
+        $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+
+        $lista_venta_tours = DB::select($consultaReportesTours);
+
+        flash('Producto registrado correctamente')->important();
+
+        return view('inicioAdministracion', compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios'));
+    	
+	}
+
+	public function editarProducto($producto){
+
+		$producto = producto::find($producto);
+		return view('editarProducto', compact('producto'));
+
+	}
+
+	public function eliminarProducto($producto){
+
+			
+		$producto = producto::find($producto);
+		$producto->delete();
+		
+		$listadoProductos = producto::all();
+        $listadoHospedajes = hospedaje::all();
+        $listadoTiquetes = tiquete::all();
+        $listadoPublicaciones = publicacion::all();
+        $listadoComentarios = comentario::all();
+
+        $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+
+        $lista_venta_producto = DB::select($consultaReportesProductos);
+
+        $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+
+        $lista_venta_tours = DB::select($consultaReportesTours);
+
+        flash('Producto elimnado correctamente')->important();
+        return view('inicioAdministracion', compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios'));
+
+	}
+
+	public function actualizarProducto(Request $request, $id){
+
+		$producto = producto::find($id);
+		$producto -> fill($request->all());
+		$producto -> save();
+
+		$listadoProductos = producto::all();
+        $listadoHospedajes = hospedaje::all();
+        $listadoTiquetes = tiquete::all();
+        $listadoPublicaciones = publicacion::all();
+        $listadoComentarios = comentario::all();
+
+        $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+
+        $lista_venta_producto = DB::select($consultaReportesProductos);
+
+        $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+
+        $lista_venta_tours = DB::select($consultaReportesTours);
+
+        flash('Producto editado correctamente')->important();
+        return view('inicioAdministracion', compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios'));
+	}
+
+    public function venderProductos(Request $request){
+
+        $productosSeleccionados = $request->input('productosSeleccionados');
+        $cantidadVendida = $request->input('cantidadVendida');
+        $precioTotal = '0';
+
+        $listadoCantidades=array();
+
+        $contadorCantidades = '0';
+
+        $contadorCantidadesParaVenta = '0';
+
+        foreach ($cantidadVendida as $cantidadV => $valueC) {
+
+            if ($valueC > '0') {
+
+                $listadoCantidades[$contadorCantidades] = $valueC;
+                $contadorCantidades++;
+            }
+
+        }  
+
+        foreach ($productosSeleccionados as $producto => $valueP) {
+
+            $valueCa = $listadoCantidades[$contadorCantidadesParaVenta];
+            $contadorCantidadesParaVenta++;
+
+            $productoS = producto::find($valueP);
+            $unidadesRestantes = $productoS->cantidad - $valueCa;
+            $precio_venta = $productoS->precio * $valueCa;
+            $productoS->cantidad = $unidadesRestantes;
+            $productoS -> save();
+
+            $venta = new venta_producto();
+            $venta->id_producto = $productoS->id;
+            $venta->cantidad = $valueCa;
+            $venta->precio = $precio_venta;
+            $venta->save();
+
+            $precioTotal = $precioTotal + $precio_venta;
+
+        }          
+                
+               
+    
+        //$producto = producto::find( $request->input('producto'));
+
+        $consultaTiquetes = "select t.numero, t.precio, t.id from tiquete t where t.estado = 'No vendido'";
+        
+        $listadoTiquetes = DB::select($consultaTiquetes);
+
+        $listadoProductos = producto::all();
+
+        $listadoHospedajes = hospedaje::all();
+
+        flash('Venta registrada correctamente, el valor es: $' .$precioTotal)->important();
+        return view('inicioVentas', compact('listadoProductos', 'listadoTiquetes', 'listadoHospedajes'));
+
+    }
+}

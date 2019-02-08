@@ -1,0 +1,45 @@
+.form-group{
+	margin-bottom: 0.5rem !important;
+}
+.wrapper-form{
+	border-radius: 10px;
+	background-color: #F3F2F2;
+	border: 0.5px white solid;
+	margin: auto;
+    padding: 15px;
+}
+
+.active{
+	color: #fff !important;
+    background-color: #007bff !important;
+    border-radius: 15px;
+}
+
+.form-p{
+	width: 310px;
+	max-height: 400px;
+}
+
+.form-h{
+	width: 370px;
+    max-height: 250px;
+}
+
+.form-t{
+	width: 330px;
+}
+
+.colmd{
+	padding-right: 30px !important;
+}
+
+.heightDiv{
+	height: 34rem !important;
+	min-height: 34rem !important;
+}
+
+.contenedor{
+	max-height: 25em;
+	min-height: 10em;
+	overflow-y: scroll; 
+}

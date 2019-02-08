@@ -1,0 +1,29 @@
+.background-acacias{
+	background-image: url('../images/lasAcacias5.jpg');
+	background-repeat: no-repeat;
+	width:100%;
+	min-height: 42rem;
+}
+
+.bg-form{
+    background-color: rgba(0, 0, 0, 0.2);
+	display: block;
+	border-radius: 8px;
+}
+
+.bg-wrapper{
+	background-color: rgba(0, 0, 0, 0.5);
+	display: block;
+	border-radius: 8px;
+	border:0.5px solid #2F3C33;
+}
+
+.titulo{
+	font-family: 'Bevan', cursive;
+}
+
+.cuerpo{
+	font-family: 'Merriweather', serif;
+
+}
+

@@ -1,0 +1,15 @@
+.card-sesion{
+	width: 400px;
+	height: 300px;
+	border-radius: 10px;
+	background-color: #F3F2F2;
+	border: 0.5px white solid;
+	padding: 20px;
+	
+}
+
+.m-sesion{
+	margin: auto;
+	margin-top: 8em;
+	margin-bottom: 8em;  
+}
