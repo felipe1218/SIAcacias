@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use lasAcaciasCoffeeFarm\producto;
 use lasAcaciasCoffeeFarm\hospedaje;
 use lasAcaciasCoffeeFarm\tiquete;
+use lasAcaciasCoffeeFarm\publicacionIngles;
+use lasAcaciasCoffeeFarm\publicacion;
 use Illuminate\Support\Facades\DB;
 use lasAcaciasCoffeeFarm\venta_producto;
 use lasAcaciasCoffeeFarm\venta_tour;
@@ -22,6 +24,7 @@ class ControladorReportes extends Controller
     	$listadoHospedajes = hospedaje::all();
     	$listadoTiquetes = tiquete::all();
 		$listadoPublicaciones = publicacion::all();
+        $listadoPublicacionesIngles = publicacionIngles::all();
         $listadoComentarios = comentario::all();
 
         $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
@@ -32,7 +35,7 @@ class ControladorReportes extends Controller
 
         $lista_venta_tours = DB::select($consultaReportesTours);
 
-        return  view('inicioAdministracion',compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios'));
+        return  view('inicioAdministracion',compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles'));
     }
       public function reporteVentaTour($venta_tours)
     {
@@ -40,6 +43,7 @@ class ControladorReportes extends Controller
     	$listadoHospedajes = hospedaje::all();
     	$listadoTiquetes = tiquete::all();
 		$listadoPublicaciones = publicacion::all();
+        $listadoPublicacionesIngles = publicacionIngles::all();
         $listadoComentarios = comentario::all();
 
         $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
@@ -52,7 +56,7 @@ class ControladorReportes extends Controller
     
         $venta_tours= venta_tours::find($venta_tours);
         
-        return  view('inicioAdministracion',compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios'));
+        return  view('inicioAdministracion',compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles'));
     }
         
 }

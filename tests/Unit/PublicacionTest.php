@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class InicioSesionVentasTestCase extends TestCase
+class PublicacionTest extends TestCase
 {
     /**
      * A basic test example.
@@ -15,6 +15,9 @@ class InicioSesionVentasTestCase extends TestCase
      */
     public function testExample()
     {
-        $this->assertTrue(true);
+        $this->get('/inicioSesion#pantallaPublicaciones')
+            ->assertStatus(500)
+            ->assertSee('Registro y gestión de publicaciones');
+
     }
 }

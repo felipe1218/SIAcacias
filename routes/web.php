@@ -12,6 +12,10 @@
 */
 
 Route::get('/', function () {
+    return view('inicio');
+});
+
+Route::get('/inicio', function () {
     return view('inicioSesion');
 });
 
@@ -62,6 +66,7 @@ Route::resource('/publicaciones/registrar','ControladorPublicaciones');
 Route::get('/publicaciones/editar/{id}','ControladorPublicaciones@editarPublicacion');
 
 Route::get('/publicaciones/eliminar/{id}','ControladorPublicaciones@eliminarPublicacion');
+Route::get('/publicaciones/eliminarIngles/{id}','ControladorPublicaciones@eliminarPublicacionIngles');
 
 Route::get('/publicaciones/actualizar/{id}','ControladorPublicaciones@actualizarPublicacion');
 
@@ -76,6 +81,8 @@ Route::get('/comentarios/eliminar/{id}','ControladorComentarios@eliminarComentar
 //__________________________________________________________________________________
 //Rutas del controlador comentario
 Route::get('/turistas','ControladorTuristas@cargarPagina');
+
+Route::get('/turistasLenguaje','ControladorTuristas@cargarPaginaLenguaje');
 
 //__________________________________________________________________________________
 //Rutas del controlador reportes

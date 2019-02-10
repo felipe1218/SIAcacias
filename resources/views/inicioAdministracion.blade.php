@@ -94,7 +94,18 @@
 										<th scope="col">Opciones</th>
 									</thead>
 									<tbody>
-											@foreach($listadoProductos as $producto)
+										@foreach($listadoProductos as $producto)
+											@if($producto->cantidad<=5)
+											<tr scope="row" style="background: rgba(255, 128, 0, 0.3);">
+												<td>{{$producto->id_tipo_producto}}</td>
+												<td>{{$producto->nombre}}</td>
+												<td>{{$producto->precio}}</td>
+												<td>{{$producto->cantidad}}</td>
+												<td>
+													<a href="/productos/editar/{{$producto->id}}" class="btn btn-warning">Editar</a>
+													<a href="/productos/eliminar/{{$producto->id}}" class="btn btn-danger">Eliminar</a>
+												</td>
+											@else
 											<tr scope="row">
 												<td>{{$producto->id_tipo_producto}}</td>
 												<td>{{$producto->nombre}}</td>
@@ -104,7 +115,10 @@
 													<a href="/productos/editar/{{$producto->id}}" class="btn btn-warning">Editar</a>
 													<a href="/productos/eliminar/{{$producto->id}}" class="btn btn-danger">Eliminar</a>
 												</td>
-											</tr>						
+												
+											</tr>
+
+											@endif					
 										@endforeach											
 									</tbody>							
 								</table>
@@ -257,6 +271,13 @@
 						<form class="form-group" method="POST" action="/publicaciones/registrar">
 							@csrf
 							<div class="wrapper-form form-p text-center" style="">
+								<label>Idioma:</label>
+								<div class="form-group">
+									<select class="form-group" name="idioma">
+											<option value="1">Español</option>
+											<option value="2">Ingles</option>
+										</select>
+								</div>
 								<label>Título:</label>
 								<div class="form-group">
 									<input type="text" name="titulo" class="form-group">
@@ -287,6 +308,27 @@
 											<td>
 												<a href="/publicaciones/editar/{{$publicacion->id}}" class="btn btn-warning">Editar</a>
 												<a href="/publicaciones/eliminar/{{$publicacion->id}}" class="btn btn-danger">Eliminar</a>
+											</td>
+										</tr>						
+									@endforeach											
+								</tbody>							
+							</table>
+						</div>
+						<div class="contenedor mt-5">
+							<table class="table text-center">
+								<thead class="thead-light">
+									<th scope="col">Título</th>
+									<th scope="col">Resumen</th>
+									<th scope="col">Opciones</th>
+								</thead>
+								<tbody>
+									@foreach($listadoPublicacionesIngles as $publicacion)
+										<tr scope="row">
+											<td>{{$publicacion->titulo}}</td>
+											<td>{{$publicacion->resumen}}</td>
+											<td>
+												<a href="/publicaciones/editar/{{$publicacion->id}}" class="btn btn-warning">Editar</a>
+												<a href="/publicaciones/eliminarIngles/{{$publicacion->id}}" class="btn btn-danger">Eliminar</a>
 											</td>
 										</tr>						
 									@endforeach											

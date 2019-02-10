@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProductosTestCase extends TestCase
+class TuristaTest extends TestCase
 {
     /**
      * A basic test example.
@@ -15,6 +15,8 @@ class ProductosTestCase extends TestCase
      */
     public function testExample()
     {
-        $this->assertTrue(true);
+        $this->get('/turistas')
+            ->assertStatus(200)
+            ->assertSee('Las acacias coffee farm');
     }
 }

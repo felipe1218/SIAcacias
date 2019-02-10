@@ -8,7 +8,6 @@
 		<title>Inicio de sesi&oacute;n</title>
 	</head>
 	<body>
-		<a href="/turistas" class="btn btn-warning">M&oacute;dulo para turistas</a>
 		{!!Form::open(['route'=>'inicioSesion.store', 'method'=>'POST'])!!}
 			<div class="card-sesion m-sesion">
 				<h2 class="text-center">Las Acacias Coffee Farm</h2>
