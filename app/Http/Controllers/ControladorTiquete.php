@@ -42,31 +42,66 @@ class ControladorTiquete extends Controller
      */
     public function store(Request $request)
     {
-        $tiquete = new tiquete();
-        $tiquete->numero = $request->input('numero');
-        $tiquete->precio = $request->input('precio');
-        $tiquete->estado = 'No vendido';
-        $tiquete->id_hospedaje = $request->input('hospedaje');
 
-        $tiquete->save();
+        $contadorNumeroTiquete = $request->input('numeroInferior');
 
-        $listadoTiquetes = tiquete::all();
-        $listadoProductos = producto::all();
-        $listadoHospedajes = hospedaje::all();
-        $listadoPublicaciones = publicacion::all();
-        $listadoPublicacionesIngles = publicacionIngles::all();
-        $listadoComentarios = comentario::all();
+        if ($request->input('numeroInferior') < $request->input('numeroSuperior')) {
 
-        $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+            while ($contadorNumeroTiquete <= $request->input('numeroSuperior')) {
+                
+                $tiquete = new tiquete();
+                $tiquete->numero = $contadorNumeroTiquete;
+                $tiquete->precio = $request->input('precio');
+                $tiquete->estado = 'No vendido';
+                $tiquete->id_hospedaje = $request->input('hospedaje');
 
-        $lista_venta_producto = DB::select($consultaReportesProductos);
+                $tiquete->save();
 
-        $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+                $contadorNumeroTiquete = $contadorNumeroTiquete + 1;
 
-        $lista_venta_tours = DB::select($consultaReportesTours);
+            }
+
+            $listadoTiquetes = tiquete::all();
+            $listadoProductos = producto::all();
+            $listadoHospedajes = hospedaje::all();
+            $listadoPublicaciones = publicacion::all();
+            $listadoPublicacionesIngles = publicacionIngles::all();
+            $listadoComentarios = comentario::all();
+
+            $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+
+            $lista_venta_producto = DB::select($consultaReportesProductos);
+
+            $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+
+            $lista_venta_tours = DB::select($consultaReportesTours);
 
 
-        return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles'));
+            return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles'));
+
+            
+        }else{
+
+            $listadoTiquetes = tiquete::all();
+            $listadoProductos = producto::all();
+            $listadoHospedajes = hospedaje::all();
+            $listadoPublicaciones = publicacion::all();
+            $listadoPublicacionesIngles = publicacionIngles::all();
+            $listadoComentarios = comentario::all();
+
+            $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+
+            $lista_venta_producto = DB::select($consultaReportesProductos);
+
+            $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+
+            $lista_venta_tours = DB::select($consultaReportesTours);
+
+
+            flash('El número inferior debe ser menor al número superior')->important();
+             return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles'));
+        }
+
         }
     /**
      * Display the specified resource.

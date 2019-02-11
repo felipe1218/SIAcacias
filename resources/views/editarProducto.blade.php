@@ -10,6 +10,9 @@
 			<div  style="background: #F3F2F2; margin: 10px; padding: 10px; border-radius: 10px; width: 600px;">				
 				<h2>Gestión de productos</h2>					
 				</br>
+				<div class="container">
+		    		@include('flash::message')
+				</div>
 				<form class="form-group" method="PUT" action="/productos/actualizar/{{$producto->id}}">
 					<table>
 						<tr>

@@ -19,34 +19,60 @@ class ControladorProductos extends Controller
     *Método para registrar o crear productos, se recibe como parámetro la petición enviada por *POST desde la vista y se crea el producto con los atributos
     */
     public function store(Request $request){
-    	
-    	$producto = new producto();
-    	$producto->nombre = $request->input('nombre');
-    	$producto->precio = $request->input('precio');
-    	$producto->cantidad = '0';
-    	$producto->id_granja = '1';
-    	$producto->id_tipo_producto = $request->input('tipo_producto');
 
-    	$producto->save();
+        if (!(is_null($request->input('nombre')) || is_null($request->input('precio')))) {
 
-    	$listadoProductos = producto::all();
-    	$listadoHospedajes = hospedaje::all();
-    	$listadoTiquetes = tiquete::all();
-		$listadoPublicaciones = publicacion::all();
-        $listadoPublicacionesIngles = publicacionIngles::all();
-        $listadoComentarios = comentario::all();
+            $producto = new producto();
+            $producto->nombre = $request->input('nombre');
+            $producto->precio = $request->input('precio');
+            $producto->cantidad = '0';
+            $producto->id_granja = '1';
+            $producto->id_tipo_producto = $request->input('tipo_producto');
 
-        $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+            $producto->save();
 
-        $lista_venta_producto = DB::select($consultaReportesProductos);
+            $listadoProductos = producto::all();
+            $listadoHospedajes = hospedaje::all();
+            $listadoTiquetes = tiquete::all();
+            $listadoPublicaciones = publicacion::all();
+            $listadoPublicacionesIngles = publicacionIngles::all();
+            $listadoComentarios = comentario::all();
 
-        $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+            $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
 
-        $lista_venta_tours = DB::select($consultaReportesTours);
+            $lista_venta_producto = DB::select($consultaReportesProductos);
 
-        flash('Producto registrado correctamente')->important();
+            $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
 
-        return view('inicioAdministracion', compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles'));
+            $lista_venta_tours = DB::select($consultaReportesTours);
+
+            flash('Producto registrado correctamente')->important();
+
+            return view('inicioAdministracion', compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles'));
+        
+            
+        }else{
+
+            $listadoProductos = producto::all();
+            $listadoHospedajes = hospedaje::all();
+            $listadoTiquetes = tiquete::all();
+            $listadoPublicaciones = publicacion::all();
+            $listadoPublicacionesIngles = publicacionIngles::all();
+            $listadoComentarios = comentario::all();
+
+            $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+
+            $lista_venta_producto = DB::select($consultaReportesProductos);
+
+            $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+
+            $lista_venta_tours = DB::select($consultaReportesTours);
+
+            flash('No deben existir campos vacios')->important();
+
+            return view('inicioAdministracion', compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles'));
+
+        }
     	
 	}
 
@@ -85,27 +111,52 @@ class ControladorProductos extends Controller
 
 	public function actualizarProducto(Request $request, $id){
 
-		$producto = producto::find($id);
-		$producto -> fill($request->all());
-		$producto -> save();
+		if (! (is_null($request->input('precio')) || is_null($request->input('cantidad')) )){
+            
+            $producto = producto::find($id);
+            $producto -> fill($request->all());
+            $producto -> save();
 
-		$listadoProductos = producto::all();
-        $listadoHospedajes = hospedaje::all();
-        $listadoTiquetes = tiquete::all();
-        $listadoPublicaciones = publicacion::all();
-        $listadoPublicacionesIngles = publicacionIngles::all();
-        $listadoComentarios = comentario::all();
+            $listadoProductos = producto::all();
+            $listadoHospedajes = hospedaje::all();
+            $listadoTiquetes = tiquete::all();
+            $listadoPublicaciones = publicacion::all();
+            $listadoPublicacionesIngles = publicacionIngles::all();
+            $listadoComentarios = comentario::all();
 
-        $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+            $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
 
-        $lista_venta_producto = DB::select($consultaReportesProductos);
+            $lista_venta_producto = DB::select($consultaReportesProductos);
 
-        $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+            $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
 
-        $lista_venta_tours = DB::select($consultaReportesTours);
+            $lista_venta_tours = DB::select($consultaReportesTours);
 
-        flash('Producto editado correctamente')->important();
-        return view('inicioAdministracion', compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles'));
+            flash('Producto editado correctamente')->important();
+            return view('inicioAdministracion', compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles'));
+        }else{
+
+            $listadoProductos = producto::all();
+            $listadoHospedajes = hospedaje::all();
+            $listadoTiquetes = tiquete::all();
+            $listadoPublicaciones = publicacion::all();
+            $listadoPublicacionesIngles = publicacionIngles::all();
+            $listadoComentarios = comentario::all();
+
+            $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+
+            $lista_venta_producto = DB::select($consultaReportesProductos);
+
+            $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+
+            $lista_venta_tours = DB::select($consultaReportesTours);
+
+            flash('No es posible editar el producto con campos vacios')->important();
+            return view('inicioAdministracion', compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles'));
+
+        }
+
+        
 	}
 
     public function venderProductos(Request $request){

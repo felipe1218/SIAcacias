@@ -74,7 +74,7 @@
 									</div>
 									<label>Ingrese el precio:</label>
 									<div class="form-group">
-										<input type="text" name="precio" class="form-group">
+										<input type="number" min="0" name="precio" class="form-group">
 									</div>
 
 									<div class="container">
@@ -173,9 +173,13 @@
 							<div class="wrapper-form form-t">
 								<form class="form-group" method="POST" action="/tiquetes/registrar">
 									@csrf
-									<label>Ingrese el número:</label>
+									<label>Ingrese el número inferior:</label>
 									<div class="form-group">
-										<input type="text" name="numero" class="form-group">
+										<input type="number" name="numeroInferior" class="form-group">
+									</div>
+									<label>Ingrese el número superior:</label>
+									<div class="form-group">
+										<input type="number" name="numeroSuperior" class="form-group">
 									</div>
 
 									<label>Ingrese el precio:</label>

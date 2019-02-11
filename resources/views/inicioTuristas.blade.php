@@ -9,14 +9,14 @@
 		<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
 		<title>Las Acacias Coffee Farm</title>
 	</head>
-	<body>
-		<div class="background-acacias m-0 p-0">
+	<body class="background-acacias">
+		<div class="m-0 p-0">
 			<div  class="col-md-12">
-				<div class="text-center titulo">
+				<div class="text-center text-white titulo" style="position: fixed; right: 40%;">
 					<h1 class="m-0">Las acacias</h1>
 					<h3>coffee farm</h3>
 				</div>
-				<div class="text-center idioma">
+				<div class="idioma">
 					<form class="form-group" method="GET" action="/turistasLenguaje">
 					<label>Idioma / Language</label>
 					<select name="idioma">
@@ -27,18 +27,18 @@
 					</form>
 				</div>
 			</div>
-			<div class="col-md-12">
+			<div class="col-md-12 mt-5">
 				<div class="container text-white">
 					<div class="bg-wrapper pb-3 ml-auto mr-auto">
-						<div class="row">
-							<div class="col-md-3 m-2">
-								<div class="bg-form">
-									@foreach($listadoPublicaciones as $publicacion)
-										<h2 class="titulo" style="text-transform: uppercase;">{{$publicacion->titulo}}</h2>
+						<div class="col-md-12">
+							<div class="col-md-3 m-2">								
+								@foreach($listadoPublicaciones as $publicacion)
+									<div class="bg-form">
+										<h3 class="titulo">{{$publicacion->titulo}}</h3>
 										<p class="cuerpo m-0"><i class="fas fa-calendar-alt"></i> {{$publicacion->created_at}}</p>
 										<p class="cuerpo"><i class="fas fa-pencil-alt"></i> {{$publicacion->texto}}</p>
-									@endforeach
-								</div>
+									</div>
+								@endforeach
 							</div>
 						</div>
 					</div>		
@@ -47,7 +47,7 @@
 			<div class="col-md-12 pt-2 pb-3">
 				<div class="container text-white cuerpo">
 					<div class="bg-wrapper pb-3">
-						<h2 class="ml-1">Por favor déjanos un comentario, es de suma importancia para nosotros / Please leave us a comment, it is very important for us</h2>
+						<h4 class="ml-1">Por favor déjanos un comentario, es de suma importancia para nosotros / Please leave us a comment, it is very important for us</h4>
 						<div class="bg-form mr-auto ml-auto" style="width: 700px;">
 							<div class="text-center p-1">
 								<form class="form-group" method="POST" action="/comentarios/registrar">
