@@ -12,6 +12,7 @@ use lasAcaciasCoffeeFarm\venta_tour;
 use lasAcaciasCoffeeFarm\tour;
 use lasAcaciasCoffeeFarm\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use lasAcaciasCoffeeFarm\user;
 
 class ControladorVentaTours extends Controller
 {
@@ -98,7 +99,9 @@ class ControladorVentaTours extends Controller
      */
     public function venderTiquetes(Request $request){
 
-        $tiquetesSeleccionados = $request->input('tiquetesSeleccionados');
+        if (!(is_null($request->input('tiquetesSeleccionados')))) {
+            
+            $tiquetesSeleccionados = $request->input('tiquetesSeleccionados');
         $precioTotal = '0';
 
         foreach ($tiquetesSeleccionados as $tiquete => $valueP) {
@@ -135,6 +138,22 @@ class ControladorVentaTours extends Controller
         
         flash('Venta registrada correctamente, el valor es: $' .$precioTotal)->important();
         return view('inicioVentas', compact('listadoTiquetes', 'listadoHospedajes', 'listadoProductos'));
+        }else{
+
+             $listadoHospedajes = hospedaje::all();
+            //$listadoTiquetes = tiquete::all();
+            $consultaTiquetes = "select t.numero, t.precio, t.id from tiquete t where t.estado = 'No vendido'";
+            
+            $listadoTiquetes = DB::select($consultaTiquetes);
+
+            $listadoProductos = producto::all();
+            
+            flash('Es necesario seleccionar al menos un tiquete para realizar la venta')->important();
+            return view('inicioVentas', compact('listadoTiquetes', 'listadoHospedajes', 'listadoProductos'));
+
+        }
+
+        
 
     }
 }

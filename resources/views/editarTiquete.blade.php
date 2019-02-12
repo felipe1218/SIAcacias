@@ -22,7 +22,7 @@
 						</tr>
 						<tr>
 							<td><label>Precio:</label></td>
-							<td><input type="text" name="precio" class="form-group"></td>
+							<td><input type="number" min="0" name="precio" class="form-group"></td>
 						</tr>
 						
 						<tr>

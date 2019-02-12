@@ -94,3 +94,8 @@ Route::get('/reportes','controladorReportes@reporteVentaTour');
 Route::resource('/ventaTours/registrar','ControladorVentaTours');
 Route::get('/ventaTours/actualizar','ControladorVentaTours@filtrarTiquetes');
 Route::get('/tiquetes/vender','ControladorVentaTours@venderTiquetes');
+
+//_________________________________________________________________________________
+//Rutas del controlador usuarios
+Route::resource('/usuarios/registrar','ControladorUsuarios');
+Route::get('/usuarios/eliminar/{id}','ControladorUsuarios@eliminarUsuario');

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use lasAcaciasCoffeeFarm\venta_producto;
 use lasAcaciasCoffeeFarm\venta_tour;
 use Illuminate\Support\Facades\DB;
+use lasAcaciasCoffeeFarm\user;
 
 class ControladorReportes extends Controller
 {
@@ -20,13 +21,14 @@ class ControladorReportes extends Controller
      public function reporteVentaProducto($venta_producto)
     {
 
-    	$listadoProductos = producto::all();
+    	$consultaTiquetes = "select t.id, t.numero, t.precio, h.nombre, t.estado from tiquete t inner join hospedaje h where t.id_hospedaje = h.id";
+        $listadoTiquetes = DB::select($consultaTiquetes);
+        $listadoProductos = producto::all();
     	$listadoHospedajes = hospedaje::all();
-    	$listadoTiquetes = tiquete::all();
 		$listadoPublicaciones = publicacion::all();
         $listadoPublicacionesIngles = publicacionIngles::all();
         $listadoComentarios = comentario::all();
-
+        $listadoUsuarios = user::all();
         $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
 
         $lista_venta_producto = DB::select($consultaReportesProductos);
@@ -35,17 +37,18 @@ class ControladorReportes extends Controller
 
         $lista_venta_tours = DB::select($consultaReportesTours);
 
-        return  view('inicioAdministracion',compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles'));
+        return  view('inicioAdministracion',compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles', 'listadoUsuarios'));
     }
       public function reporteVentaTour($venta_tours)
     {
+        $consultaTiquetes = "select t.id, t.numero, t.precio, h.nombre, t.estado from tiquete t inner join hospedaje h where t.id_hospedaje = h.id";
+        $listadoTiquetes = DB::select($consultaTiquetes);
         $listadoProductos = producto::all();
     	$listadoHospedajes = hospedaje::all();
-    	$listadoTiquetes = tiquete::all();
 		$listadoPublicaciones = publicacion::all();
         $listadoPublicacionesIngles = publicacionIngles::all();
         $listadoComentarios = comentario::all();
-
+        $listadoUsuarios = user::all();
         $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
 
         $lista_venta_producto = DB::select($consultaReportesProductos);
@@ -56,7 +59,7 @@ class ControladorReportes extends Controller
     
         $venta_tours= venta_tours::find($venta_tours);
         
-        return  view('inicioAdministracion',compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles'));
+        return  view('inicioAdministracion',compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles', 'listadoUsuarios'));
     }
         
 }

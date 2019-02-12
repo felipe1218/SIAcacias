@@ -12,12 +12,16 @@
 			<nav class="navbar fixed-top bg-dark">
 				<h1 class="navbar-brand mr-1" style="color: #3490dc; font-size: 25px; margin: 0;"><i class="fa fa-user"></i> M&oacute;dulo de administraci&oacute;n</h1>
 				<a href="/" onclick="clicSalir()" class="float-right mt-1" style="font-size: 25px; color:red !important"><span class="fa fa-power-off"></span></a>	
+				<div class="container">
+		    		@include('flash::message')
+				</div>
 			</nav>
 		</header>
 
 		<div class="row pt-5 mt-3">
 			<div class="col-md-2 bg-dark heightDiv">
 				<ul class="nav navbar flex-column mt-3 text-center">
+					</li>
 					<li class="nav-item">
 						<a id="1" class="nav-link" href="#pantallaProductos" style="font-size: 18px;">	
 							<p><i class="fa fa-clipboard-list"></i> Productos</p>
@@ -48,9 +52,14 @@
 						<a id="6" class="nav-link" href="#pantallaComentarios" style="font-size: 18px;">
 							<p><i class="fa fa-file-alt"></i> Comentarios</p>
 						</a>
-					</li>							
+					</li>
+					<li class="nav-item">
+						<a id="7" class="nav-link" href="#pantallaUsuarios" style="font-size: 18px;">	
+							<p><i class="fa fa-clipboard-list"></i> Usuarios</p>
+						</a>							
 				</ul>
 			</div>
+
 			<main class="col colmd heightDiv" style="overflow-y: scroll;">
 				<div class="mt-2 mb-2">
 					<section class="mt-3 mb-5" id="pantallaProducto">
@@ -77,9 +86,7 @@
 										<input type="number" min="0" name="precio" class="form-group">
 									</div>
 
-									<div class="container">
-		    							@include('flash::message')
-									</div>
+									
 
 									<button type="submit" class="btn btn-primary">Registrar producto</button>	
 								</div>
@@ -154,7 +161,6 @@
 												<td>{{$hospedaje->nombre}}</td>
 												<td>							
 													<a href="/hospedajes/editar/{{$hospedaje->id}}" class="btn btn-warning">Editar</a>
-													<a href="/hospedajes/eliminar/{{$hospedaje->id}}" class="btn btn-danger">Eliminar</a>
 												</td>
 											</tr>							
 										@endforeach												
@@ -175,16 +181,16 @@
 									@csrf
 									<label>Ingrese el número inferior:</label>
 									<div class="form-group">
-										<input type="number" name="numeroInferior" class="form-group">
+										<input type="number" min='0' name="numeroInferior" class="form-group">
 									</div>
 									<label>Ingrese el número superior:</label>
 									<div class="form-group">
-										<input type="number" name="numeroSuperior" class="form-group">
+										<input type="number" min='0' name="numeroSuperior" class="form-group">
 									</div>
 
 									<label>Ingrese el precio:</label>
 									<div class="form-group">
-										<input type="text" name="precio" class="form-group">
+										<input type="number" min='0' name="precio" class="form-group">
 									</div>
 
 									<label>Seleccione hospedaje:</label>
@@ -212,7 +218,7 @@
 											<tr scope="row">
 												<td>{{$tiquete->numero}}</td>
 												<td>{{$tiquete->precio}}</td>
-												<td>{{$tiquete->id_hospedaje}}</td>
+												<td>{{$tiquete->nombre}}</td>
 												<td>{{$tiquete->estado}}</td>
 												<td>
 													<a href="/tiquetes/editar/{{$tiquete->id}}" class="btn btn-warning">Editar</a>
@@ -363,6 +369,61 @@
 							</table>
 						</div>						
 					</section>
+
+					<section class="mt-3 mb-5" id="pantallaUsuarios">
+						<h2>Registro y gestión de usuarios</h2>
+						<div class="text-center">
+							<form class="form-group" method="POST" action="/usuarios/registrar">
+								@csrf
+								<div class="wrapper-form form-p" style="">
+									<label>Seleccione el tipo de usuario:</label>
+									<div class="form-group">
+										<select class="form-group" name="tipo_usuario">
+											<option value="1">Administrador</option>
+											<option value="2">Vendedor</option>
+										</select>
+									</div>
+									<label>Ingrese el nombre:</label>
+									<div class="form-group">
+										<input type="text" name="name" class="form-group">
+									</div>
+									<label>Ingrese el correo:</label>
+									<div class="form-group">
+										<input type="text" name="email" class="form-group">
+									</div>
+									<label>Ingrese la contraseña:</label>
+									<div class="form-group">
+										<input type="password" name="password" class="form-group">
+									</div>
+									
+									<button type="submit" class="btn btn-primary">Registrar Usuario</button>	
+								</div>
+							</form>
+							<div class="contenedor mt-5">
+							<table class="table text-center">
+								<thead class="thead-light">
+									<th scope="col">Nombre</th>
+									<th scope="col">Correo</th>
+									<th scope="col">Tipo de usuario</th>
+									<th scope="col">Opciones</th>
+								</thead>
+								<tbody>
+									@foreach($listadoUsuarios as $usuario)
+										<tr scope="row">
+											<td>{{$usuario->name}}</td>
+											<td>{{$usuario->email}}</td>
+											<td>{{$usuario->tipo_usuario}}</td>
+											<td>
+												<a href="/usuarios/eliminar/{{$usuario->id}}" class="btn btn-danger">Eliminar</a>
+											</td>
+										</tr>						
+									@endforeach											
+								</tbody>							
+							</table>
+						</div>
+						</div>
+						
+					</section>
 				</div>
 			</main>	
 		</div>
@@ -376,12 +437,14 @@
 					$( "#4" ).attr( "class", "nav-link" );
 					$( "#5" ).attr( "class", "nav-link" );
 					$( "#6" ).attr( "class", "nav-link" );
+					$( "#7" ).attr( "class", "nav-link" );
 					$("#pantallaProducto").css("display", "block");
 					$("#pantallaHospedaje").css("display", "none");
 					$("#pantallaTiquete").css("display", "none");
 					$("#pantallaReporte").css("display", "none");
 					$("#pantallaPublicaciones").css("display", "none");
 					$("#pantallaComentarios").css("display", "none");
+					$("#pantallaUsuarios").css("display", "none");
 				});
 				$("#2").click(function(){
 					$( "#1" ).attr( "class", "nav-link " );
@@ -390,12 +453,14 @@
 					$( "#4" ).attr( "class", "nav-link" );
 					$( "#5" ).attr( "class", "nav-link" );
 					$( "#6" ).attr( "class", "nav-link" );
+					$( "#7" ).attr( "class", "nav-link" );
 					$("#pantallaHospedaje").css("display", "block");
 					$("#pantallaProducto").css("display", "none");
 					$("#pantallaTiquete").css("display", "none");
 					$("#pantallaReporte").css("display", "none");
 					$("#pantallaPublicaciones").css("display", "none");
 					$("#pantallaComentarios").css("display", "none");
+					$("#pantallaUsuarios").css("display", "none");
 				});
 				$("#3").click(function(){
 					$( "#1" ).attr( "class", "nav-link " );
@@ -404,12 +469,14 @@
 					$( "#4" ).attr( "class", "nav-link" );
 					$( "#5" ).attr( "class", "nav-link" );
 					$( "#6" ).attr( "class", "nav-link" );
+					$( "#7" ).attr( "class", "nav-link" );
 					$("#pantallaTiquete").css("display", "block");
 					$("#pantallaProducto").css("display", "none");
 					$("#pantallaHospedaje").css("display", "none");
 					$("#pantallaReporte").css("display", "none");
 					$("#pantallaPublicaciones").css("display", "none");
 					$("#pantallaComentarios").css("display", "none");
+					$("#pantallaUsuarios").css("display", "none");
 				});
 				$("#4").click(function(){
 					$( "#1" ).attr( "class", "nav-link " );
@@ -418,12 +485,14 @@
 					$( "#4" ).attr( "class", "nav-link active" );
 					$( "#5" ).attr( "class", "nav-link" );
 					$( "#6" ).attr( "class", "nav-link" );
+					$( "#7" ).attr( "class", "nav-link" );
 					$("#pantallaReporte").css("display", "block");
 					$("#pantallaHospedaje").css("display", "none");
 					$("#pantallaTiquete").css("display", "none");
 					$("#pantallaProducto").css("display", "none");
 					$("#pantallaPublicaciones").css("display", "none");
 					$("#pantallaComentarios").css("display", "none");
+					$("#pantallaUsuarios").css("display", "none");
 				});
 				$("#5").click(function(){
 					$( "#1" ).attr( "class", "nav-link " );
@@ -432,12 +501,14 @@
 					$( "#4" ).attr( "class", "nav-link" );
 					$( "#5" ).attr( "class", "nav-link active" );
 					$( "#6" ).attr( "class", "nav-link" );
+					$( "#7" ).attr( "class", "nav-link" );
 					$("#pantallaReporte").css("display", "none");
 					$("#pantallaHospedaje").css("display", "none");
 					$("#pantallaTiquete").css("display", "none");
 					$("#pantallaProducto").css("display", "none");
 					$("#pantallaPublicaciones").css("display", "block");
 					$("#pantallaComentarios").css("display", "none");
+					$("#pantallaUsuarios").css("display", "none");
 				});
 				$("#6").click(function(){
 					$( "#1" ).attr( "class", "nav-link " );
@@ -446,12 +517,30 @@
 					$( "#4" ).attr( "class", "nav-link" );
 					$( "#5" ).attr( "class", "nav-link" );
 					$( "#6" ).attr( "class", "nav-link active" );
+					$( "#7" ).attr( "class", "nav-link" );
 					$("#pantallaReporte").css("display", "none");
 					$("#pantallaHospedaje").css("display", "none");
 					$("#pantallaTiquete").css("display", "none");
 					$("#pantallaProducto").css("display", "none");
 					$("#pantallaPublicaciones").css("display", "none");
 					$("#pantallaComentarios").css("display", "block");
+					$("#pantallaUsuarios").css("display", "none");
+				});
+				$("#7").click(function(){
+					$( "#1" ).attr( "class", "nav-link " );
+					$( "#2" ).attr( "class", "nav-link" );
+					$( "#3" ).attr( "class", "nav-link" );
+					$( "#4" ).attr( "class", "nav-link" );
+					$( "#5" ).attr( "class", "nav-link" );
+					$( "#6" ).attr( "class", "nav-link" );
+					$( "#7" ).attr( "class", "nav-link active" );
+					$("#pantallaReporte").css("display", "none");
+					$("#pantallaHospedaje").css("display", "none");
+					$("#pantallaTiquete").css("display", "none");
+					$("#pantallaProducto").css("display", "none");
+					$("#pantallaPublicaciones").css("display", "none");
+					$("#pantallaComentarios").css("display", "none");
+					$("#pantallaUsuarios").css("display", "block");
 				});
 
 			} );

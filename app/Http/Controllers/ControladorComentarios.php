@@ -11,6 +11,7 @@ use lasAcaciasCoffeeFarm\publicacionIngles;
 use lasAcaciasCoffeeFarm\comentario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use lasAcaciasCoffeeFarm\user;
 
 class ControladorComentarios extends Controller
 {
@@ -34,10 +35,13 @@ class ControladorComentarios extends Controller
 			
 		$comentario = comentario::find($comentario);
 		$comentario->delete();
+
+         $consultaTiquetes = "select t.id, t.numero, t.precio, h.nombre, t.estado from tiquete t inner join hospedaje h where t.id_hospedaje = h.id";
+            $listadoTiquetes = DB::select($consultaTiquetes);
 		
 		$listadoProductos = producto::all();
         $listadoHospedajes = hospedaje::all();
-        $listadoTiquetes = tiquete::all();
+        $listadoUsuarios = user::all();
         $listadoPublicaciones = publicacion::all();
         $listadoPublicacionesIngles = publicacionIngles::all();
         $listadoComentarios = comentario::all();
@@ -50,7 +54,7 @@ class ControladorComentarios extends Controller
 
         $lista_venta_tours = DB::select($consultaReportesTours);
 
-        return view('inicioAdministracion', compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles'));
+        return view('inicioAdministracion', compact('lista_venta_tours','lista_venta_producto','listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'listadoPublicacionesIngles', 'listadoUsuarios'));
 
 	}
 }

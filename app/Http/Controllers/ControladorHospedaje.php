@@ -11,6 +11,7 @@ use lasAcaciasCoffeeFarm\publicacion;
 use lasAcaciasCoffeeFarm\publicacionIngles;
 use lasAcaciasCoffeeFarm\comentario;
 use Illuminate\Support\Facades\DB;
+use lasAcaciasCoffeeFarm\user;
 
 use lasAcaciasCoffeeFarm\Http\Controllers\Controller;
 
@@ -48,27 +49,65 @@ class ControladorHospedaje extends Controller
      */
     public function store(Request $request)
     {
-        $hospedaje = new hospedaje();
-        $hospedaje->nombre = $request->input('nombre');
-        $hospedaje->id_granja = '1';
-        $hospedaje->save();
 
-        $listadoProductos = producto::all();
-        $listadoHospedajes = hospedaje::all();
-        $listadoTiquetes = tiquete::all();
-        $listadoPublicaciones = publicacion::all();
-        $listadoPublicacionesIngles = publicacionIngles::all();
-        $listadoComentarios = comentario::all();
+        $hospedajesRegistrados = hospedaje::all();
 
-        $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+        foreach ($hospedajesRegistrados as $hospedajeARegistrar) { 
+            
+            if ( !( ($hospedajeARegistrar->nombre == $request->input('nombre')) || (is_null($request->input('nombre'))))) {
 
-        $lista_venta_producto = DB::select($consultaReportesProductos);
+                $hospedaje = new hospedaje();
+                $hospedaje->nombre = $request->input('nombre');
+                $hospedaje->id_granja = '1';
+                $hospedaje->save();
 
-        $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+                 $consultaTiquetes = "select t.id, t.numero, t.precio, h.nombre, t.estado from tiquete t inner join hospedaje h where t.id_hospedaje = h.id";
+            $listadoTiquetes = DB::select($consultaTiquetes);
 
-        $lista_venta_tours = DB::select($consultaReportesTours);
+                $listadoProductos = producto::all();
+                $listadoHospedajes = hospedaje::all();
+                $listadoUsuarios = user::all();
+                $listadoPublicaciones = publicacion::all();
+                $listadoPublicacionesIngles = publicacionIngles::all();
+                $listadoComentarios = comentario::all();
 
-        return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles'));
+                $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+
+                $lista_venta_producto = DB::select($consultaReportesProductos);
+
+                $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+
+                $lista_venta_tours = DB::select($consultaReportesTours);
+
+                return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles', 'listadoUsuarios'));
+               
+            }else{
+
+
+                 $consultaTiquetes = "select t.id, t.numero, t.precio, h.nombre, t.estado from tiquete t inner join hospedaje h where t.id_hospedaje = h.id";
+                $listadoTiquetes = DB::select($consultaTiquetes);
+
+                $listadoProductos = producto::all();
+                $listadoHospedajes = hospedaje::all();
+                $listadoUsuarios = user::all();
+                $listadoPublicaciones = publicacion::all();
+                $listadoPublicacionesIngles = publicacionIngles::all();
+                $listadoComentarios = comentario::all();
+
+                $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+
+                $lista_venta_producto = DB::select($consultaReportesProductos);
+
+                $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+
+                $lista_venta_tours = DB::select($consultaReportesTours);
+
+                flash('No es posible registrar un hospedaje con el campo nombre vacío, o con un nombre registrado anteriormente')->important();
+                return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles', 'listadoUsuarios'));
+            }
+
+        }
+        
     }
 
     /**
@@ -106,29 +145,63 @@ class ControladorHospedaje extends Controller
      */
     public function actualiarHospedaje(Request $request, $id)
     {
-        $hospedaje = hospedaje::find($id);
-        $hospedaje -> fill($request->all());
-        $hospedaje -> save();
+        
+       $hospedajesRegistrados = hospedaje::all();
 
-        $listadoProductos = producto::all();
-        $listadoHospedajes = hospedaje::all();
-        $listadoTiquetes = tiquete::all();
-        $listadoPublicaciones = publicacion::all();
-        $listadoPublicacionesIngles = publicacionIngles::all();
-        $listadoComentarios = comentario::all();
+        foreach ($hospedajesRegistrados as $hospedajeARegistrar) { 
+            
+            if ( !( ($hospedajeARegistrar->nombre == $request->input('nombre')) || (is_null($request->input('nombre'))))) {
 
-        $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+                $hospedaje = hospedaje::find($id);
+                $hospedaje -> fill($request->all());
+                $hospedaje -> save();
 
-        $lista_venta_producto = DB::select($consultaReportesProductos);
+                $consultaTiquetes = "select t.id, t.numero, t.precio, h.nombre, t.estado from tiquete t inner join hospedaje h where t.id_hospedaje = h.id";
+                $listadoTiquetes = DB::select($consultaTiquetes);
+                $listadoUsuarios = user::all();
+                $listadoProductos = producto::all();
+                $listadoHospedajes = hospedaje::all();
+                $listadoPublicaciones = publicacion::all();
+                $listadoPublicacionesIngles = publicacionIngles::all();
+                $listadoComentarios = comentario::all();
 
-        $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+                $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
 
-        $lista_venta_tours = DB::select($consultaReportesTours);
+                $lista_venta_producto = DB::select($consultaReportesProductos);
 
-        return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles'));
+                $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+
+                $lista_venta_tours = DB::select($consultaReportesTours);
+
+                return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles', 'listadoUsuarios'));
+
+        }else{
+
+            $consultaTiquetes = "select t.id, t.numero, t.precio, h.nombre, t.estado from tiquete t inner join hospedaje h where t.id_hospedaje = h.id";
+                $listadoTiquetes = DB::select($consultaTiquetes);
+
+                $listadoProductos = producto::all();
+                $listadoHospedajes = hospedaje::all();
+                $listadoPublicaciones = publicacion::all();
+                $listadoPublicacionesIngles = publicacionIngles::all();
+                $listadoComentarios = comentario::all();
+                $listadoUsuarios = user::all();
+                $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
+
+                $lista_venta_producto = DB::select($consultaReportesProductos);
+
+                $consultaReportesTours = "select t.numero, v.precio, v.created_at from venta_tour v inner join tiquete t where t.estado = 'Vendido' and t.id = v.id_tiquete";
+
+                $lista_venta_tours = DB::select($consultaReportesTours);
+
+                flash('No es posible editar un hospedaje con el campo nombre vacío, o con un nombre registrado anteriormente')->important();
+
+                return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles', 'listadoUsuarios'));
+
+        }
  
     }
-
+}
     /**
      * Remove the specified resource from storage.
      *
@@ -140,13 +213,16 @@ class ControladorHospedaje extends Controller
         $hospedaje=hospedaje::find($hospedaje);
         $hospedaje->delete();
 
+        
+        $consultaTiquetes = "select t.id, t.numero, t.precio, h.nombre, t.estado from tiquete t inner join hospedaje h where t.id_hospedaje = h.id";
+        $listadoTiquetes = DB::select($consultaTiquetes);
+
         $listadoProductos = producto::all();
         $listadoHospedajes = hospedaje::all();
-        $listadoTiquetes = tiquete::all();
         $listadoPublicaciones = publicacion::all();
         $listadoPublicacionesIngles = publicacionIngles::all();
         $listadoComentarios = comentario::all();
-
+        $listadoUsuarios = user::all();
          $consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
 
         $lista_venta_producto = DB::select($consultaReportesProductos);
@@ -155,7 +231,7 @@ class ControladorHospedaje extends Controller
 
         $lista_venta_tours = DB::select($consultaReportesTours);
 
-        return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles'));
+        return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles', 'listadoUsuarios'));
 
      }
 }

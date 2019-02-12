@@ -19,13 +19,16 @@ class ControladorInicioSesion extends Controller
     	public function store(Request $request){
 
 		//Listamos todos los usuarios
+		
+    	$consultaTiquetes = "select t.id, t.numero, t.precio, h.nombre, t.estado from tiquete t inner join hospedaje h where t.id_hospedaje = h.id";
+        $listadoTiquetes = DB::select($consultaTiquetes);
 		$listadoUsuarios = User::all();
 		$listadoProductos = producto::all();
 		$listadoHospedajes = hospedaje::all();
-		$listadoTiquetes = tiquete::all();
 		$listadoPublicaciones = publicacion::all();
 		$listadoPublicacionesIngles = publicacionIngles::all();
 		$listadoComentarios = comentario::all();
+		$listadoUsuarios = user::all();
 
 		$consultaReportesProductos = "select p.nombre, v.cantidad, v.precio, v.created_at from venta_producto v inner join producto p where p.id = v.id_producto";
 
@@ -46,7 +49,7 @@ class ControladorInicioSesion extends Controller
 				if ($usuario->tipo_usuario=='Administrador') {
 					
 					
-					return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles'));
+					return view('inicioAdministracion', compact('listadoProductos', 'listadoHospedajes', 'listadoTiquetes', 'listadoPublicaciones', 'listadoComentarios', 'lista_venta_producto', 'lista_venta_tours', 'listadoPublicacionesIngles', 'listadoUsuarios'));
 			
 
 				//Si el usuario es un vendedor, se direcciona a la pantalla de ventas
