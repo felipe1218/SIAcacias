@@ -13,7 +13,7 @@ class CreateTiquetesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tiquete', function (Blueprint $table) {
+        Schema::create('tiquetes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('numero');
             $table->string('precio');
