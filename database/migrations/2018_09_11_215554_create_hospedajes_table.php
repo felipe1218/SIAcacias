@@ -13,7 +13,7 @@ class CreateHospedajesTable extends Migration
      */
     public function up()
     {
-        Schema::create('hospedajes', function (Blueprint $table) {
+        Schema::create('hospedaje', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre');
             $table->integer('id_granja')->unsigned();

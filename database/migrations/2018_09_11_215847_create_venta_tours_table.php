@@ -13,7 +13,7 @@ class CreateVentaToursTable extends Migration
      */
     public function up()
     {
-        Schema::create('venta_tours', function (Blueprint $table) {
+        Schema::create('venta_tour', function (Blueprint $table) {
             $table->increments('id');
             $table->string('cantidad');
             $table->string('precio');
